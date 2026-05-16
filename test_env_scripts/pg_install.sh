@@ -61,7 +61,11 @@ for ver in "${versions[@]}"; do
     	install_dir="$BASE_DIR/pgsql$ver"
     	data_dir="$install_dir/data"
     	log_file="$LOG_DIR/logfile$ver"
+    	
     	port=$(( 5432 + (MAJOR * 100) + MINOR ))
+    	while ss -tln | grep -q ":${port} "; do
+		((port++))
+	done
 	
 	cd "$src_dir"
     	CFLAGS="-Og" ./configure \
